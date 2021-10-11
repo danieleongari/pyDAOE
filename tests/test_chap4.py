@@ -30,4 +30,4 @@ def test_example_4_3():
 
     res = graeco_latin_square(df)  # Compare with Table 4.21
 
-    assert res.loc["Treatements-1", "P-Value"] == 0.0033436213991769547
+    assert res.loc["Treatements", "P-Value"] == 0.0033436213991769547
