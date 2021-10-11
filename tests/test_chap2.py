@@ -2,7 +2,7 @@ import pandas as pd
 from pydoe.simple_comparative import t_test
 
 
-def example_2_0():
+def test_example_2_0():
     """Example in the text."""
     data = {
         'Mortar': [
