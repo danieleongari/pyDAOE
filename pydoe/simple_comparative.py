@@ -2,13 +2,22 @@
 from scipy import stats
 
 
-def t_test(df, treat_col, measure_col):
+def t_test(df, factor_col=None, observ_col=None):
     """Wrapper for scipy.stats.ttest_ind."""
-    treats = list(set(df[treat_col].values))
+
+    if factor_col is None:
+        factor_col = df.columns[0]
+
+    if observ_col is None:
+        observ_col = df.columns[1]
+
+    treats = list(df[factor_col].unique())
+
     res = stats.ttest_ind(
-        a=df[df[treat_col] == treats[0]].loc[:, measure_col].values,
-        b=df[df[treat_col] == treats[1]].loc[:, measure_col].values,
+        a=df[df[factor_col] == treats[0]].loc[:, observ_col].values,
+        b=df[df[factor_col] == treats[1]].loc[:, observ_col].values,
         equal_var=True,  # default
         alternative='two-sided'  # default
     )
-    return {"P-value": res.pvalue}
+
+    return {"P-Value": res.pvalue}
