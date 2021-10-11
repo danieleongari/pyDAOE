@@ -190,3 +190,69 @@ def latin_square(df, factor_col=None, block1_col=None, block2_col=None, observ_c
     table = pd.DataFrame(rows, columns=cols)
     table = table.set_index("Source of Variation")
     return table
+
+
+def graeco_latin_square(df, factor1_col=None, factor2_col=None, block1_col=None, block2_col=None, observ_col=None):
+    """Graeco-Latin square design."""
+
+    # Default format of the dataframe
+    cols = [factor1_col, factor2_col, block1_col, block2_col, observ_col]
+    if None in cols:
+        factor1_col, factor2_col, block1_col, block2_col, observ_col = df.columns
+
+    treat1, treat2 = list(df[factor1_col].unique()), list(df[factor2_col].unique())
+    treat1, treat2 = sorted(treat1), sorted(treat2)
+
+    block1, block2 = list(df[block1_col].unique()), list(df[block2_col].unique())
+    block1, block2 = sorted(block1), sorted(block2)
+
+    # Considering equal treat, rows, cols
+    n_treat1 = len(treat1)  # "Latin Letter", p
+    n_treat2 = len(treat2)  # "Greek Letter", p
+    n_block1 = len(block1)  # "Rows", p
+    n_block2 = len(block2)  # "Columns", p
+
+    if not n_treat1 == n_treat2 == n_block1 == n_block2:
+        raise NotImplementedError("Incomplete Graeco-Latin Square not implemented.")
+
+    p = n_treat1  # == n_block1 == n_block2 in Latin Square Design
+    n_total = p**2
+
+    # Degree of Freedom
+    dof_p = p - 1
+    dof_error = (p - 3) * (p - 1)
+    dof_total = n_total - 1
+
+    # Sum of Squares
+    ss_treat1 = _sum_y2_k(df, factor1_col, observ_col) / p - _y2_sum(df, observ_col) / n_total
+    ss_treat2 = _sum_y2_k(df, factor2_col, observ_col) / p - _y2_sum(df, observ_col) / n_total
+    ss_block1 = _sum_y2_k(df, block1_col, observ_col) / p - _y2_sum(df, observ_col) / n_total
+    ss_block2 = _sum_y2_k(df, block2_col, observ_col) / p - _y2_sum(df, observ_col) / n_total
+    ss_total = _sum_y2(df, observ_col) - _y2_sum(df, observ_col) / n_total
+    ss_error = ss_total - ss_treat1 - ss_treat2 - ss_block1 - ss_block2
+
+    # Mean Squares
+    ms_treat1 = ss_treat1 / dof_p
+    ms_treat2 = ss_treat2 / dof_p
+    ms_block1 = ss_block1 / dof_p
+    ms_block2 = ss_block2 / dof_p
+    ms_error = ss_error / dof_error
+
+    # test statistic
+    f0_treat = ms_treat1 / ms_error
+    rv = stats.f(dof_p, dof_error)
+    pval_treat = rv.sf(f0_treat)
+
+    # Print Table 4.19
+    cols = ["Source of Variation", "Sum of Squares", "Degree of Freedom", "Mean Square", "F0", "P-Value"]
+    rows = [
+        ["Treatements-1", ss_treat1, dof_p, ms_treat1, f0_treat, pval_treat],
+        ["Treatements-2", ss_treat2, dof_p, ms_treat2, "", ""],
+        ["Block1", ss_block1, dof_p, ms_block1, "", ""],
+        ["Block2", ss_block2, dof_p, ms_block2, "", ""],
+        ["Error", ss_error, dof_error, ms_error, "", ""],
+        ["Total", ss_total, dof_total, "", "", ""],
+    ]
+    table = pd.DataFrame(rows, columns=cols)
+    table = table.set_index("Source of Variation")
+    return table

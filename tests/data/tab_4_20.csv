@@ -1,0 +1,26 @@
+Rocket Propellant Formulation,Test Assemblies, Batch of Raw Material, Operator, Burning Rate - 25 (min)
+A,alpha,1,1,-1
+B,gamma,1,2,-5
+C,epsilon,1,3,-6
+D,beta,1,4,-1
+E,delta,1,5,-1
+B,beta,2,1,-8
+C,delta,2,2,-1
+D,alpha,2,3,5
+E,gamma,2,4,2
+A,epsilon,2,5,11
+C,gamma,3,1,-7
+D,epsilon,3,2,13
+E,beta,3,3,1
+A,delta,3,4,2
+B,alpha,3,5,-4
+D,delta,4,1,1
+E,alpha,4,2,6
+A,gamma,4,3,1
+B,epsilon,4,4,-2
+C,beta,4,5,-3
+E,epsilon,5,1,-3
+A,beta,5,2,5
+B,delta,5,3,-5
+C,alpha,5,4,4
+D,gamma,5,5,6
