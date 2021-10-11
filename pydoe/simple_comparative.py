@@ -5,11 +5,10 @@ from scipy import stats
 def t_test(df, factor_col=None, observ_col=None):
     """Wrapper for scipy.stats.ttest_ind."""
 
-    if factor_col is None:
-        factor_col = df.columns[0]
-
-    if observ_col is None:
-        observ_col = df.columns[1]
+    # Default format of the dataframe
+    cols = [factor_col, observ_col]
+    if None in cols:
+        factor_col, observ_col = df.columns
 
     treats = list(df[factor_col].unique())
 
