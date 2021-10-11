@@ -1,4 +1,4 @@
-"""Module for Chapter 2."""
+"""Module for simple comparative analysis."""
 from scipy import stats
 
 
