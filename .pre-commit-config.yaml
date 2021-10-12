@@ -21,3 +21,7 @@ repos:
     name: prospector
     description: "This hook runs Prospector: https://github.com/landscapeio/prospector"
     entry: prospector
+- repo: https://github.com/alan-turing-institute/CleverCSV-pre-commit
+  rev: v0.7.1 
+  hooks:
+    - id: clevercsv-standardize
