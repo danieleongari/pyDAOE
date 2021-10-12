@@ -1,0 +1,25 @@
+Ground Clutter,Filter Type,Operator,Intensity Level
+Low,1,1,90
+Low,2,1,86
+Low,1,2,96
+Low,2,2,84
+Low,1,3,100
+Low,2,3,92
+Low,1,4,92
+Low,2,4,81
+Med,1,1,102
+Med,2,1,87
+Med,1,2,106
+Med,2,2,90
+Med,1,3,105
+Med,2,3,97
+Med,1,4,96
+Med,2,4,80
+Hig,1,1,114
+Hig,2,1,93
+Hig,1,2,112
+Hig,2,2,91
+Hig,1,3,108
+Hig,2,3,95
+Hig,1,4,98
+Hig,2,4,83
