@@ -2,6 +2,8 @@
 from scipy import stats
 import pandas as pd
 
+from pydoe.utils import ALPHABET, contrast_constants_table
+
 
 def _sum_y2_k(df, k, y):  #TODO: add as a function of the DataFrame
     """Sum of the squared sums over the column k.
@@ -415,4 +417,85 @@ def two_factor_factorial_oneobs(df, factor1_col=None, factor2_col=None, observ_c
     ]
     table = pd.DataFrame(rows, columns=cols)
     table = table.set_index("Source of Variation")
+    return table
+
+
+def twoktest(df, test):
+    """Get the sum of tests from a 2k factorial, given test index such as (1), a, b, abc, etc."""
+    factors = list(df.columns[:-1])
+    k = len(factors)
+    treat_dict = {factor: sorted(df[factor].unique()) for factor in factors}
+    coded_factors = ALPHABET.lower()[:k]  # e.g., abcd for k=4
+
+    if test == "(1)":
+        hilo = [0] * k
+    else:
+        hilo = [int(f in test) for f in coded_factors]
+
+    for factor, hl in zip(factors, hilo):
+        df = df[df[factor] == treat_dict[factor][hl]]
+
+    return df.iloc[:, -1].sum()
+
+
+def twok_factorial(df):
+    """2^k Factorial Design.
+    This implementation works for the General 2^k, therefore for whatever number of factors.
+    """
+
+    # Default format of the dataframe
+    # NOTE: for semplicity of later calculations we impose the observations to be in the last column
+    factors = list(df.columns[:-1])
+    observ_col = df.columns[-1]
+
+    treat_dict = {factor: sorted(df[factor].unique()) for factor in factors}
+
+    # Check if all factors have 2 treatements
+    for factor, treats in treat_dict.items():
+        ntreats = len(treats)
+        if ntreats != 2:
+            raise Exception(f"Factor {factor} has {ntreats}!=2 treatements: not 2^k design.")
+
+    # Check if all tests have the same number of replicas
+    replicas = df.groupby(factors).count()[observ_col].unique()  # np.array
+    if len(replicas) > 1:
+        raise NotImplementedError("All tests must have the same number of replicas.")
+
+    n_fact = len(factors)  # k
+    n_repl = replicas[0]  # n, Only one value in the array
+
+    # Load the contrast constants, store the sum of observations for each test
+    cc_table = contrast_constants_table(n_fact)
+    sumtests = {test: twoktest(df, test) for test in cc_table.index}
+    effects = list(cc_table.columns)
+
+    # Evaluate effects and their sum of squares
+    res_dict = {}
+    for effect in effects:
+        contrast = sum([cc_table.loc[test, effect] * sumtests[test] for test in sumtests])
+        effect_val = contrast / (n_repl * 2**n_fact)  # Equation 6.22
+        ss = contrast**2 / (n_repl * 2**n_fact)  # Equation 6.23
+        res_dict[effect] = {"Effect": effect_val, "Sum of Squares": ss, "Degrees of Freedom": 1}
+
+    # Evalutate total and error
+    ss_total = _sum_y2(df, observ_col) - _y2_sum(df, observ_col) / ((2**n_fact) * n_repl)  # Equation 6.9
+    ss_error = ss_total - sum([res_dict[effect]["Sum of Squares"] for effect in effects])
+    res_dict["Error"] = {
+        "Sum of Squares": ss_error,
+        "Degrees of Freedom": (2**n_fact) * (n_repl - 1)
+    }  # DOF will fail with only one replica!!!
+    res_dict["Total"] = {"Sum of Squares": ss_total, "Degrees of Freedom": ((2**n_fact) * n_repl) - 1}
+
+    for key in effects + ['Error']:
+        res_dict[key]['Mean Square'] = res_dict[key]["Sum of Squares"] / res_dict[key]["Degrees of Freedom"]
+
+    for key in effects:
+        f0 = res_dict[key]['Mean Square'] / res_dict['Error']['Mean Square']
+        pval = stats.f(res_dict[key]['Degrees of Freedom'], res_dict['Error']['Degrees of Freedom']).sf(f0)
+        res_dict[key].update({"F0": f0, "P-Value": pval})
+
+    # Print Table
+    table = pd.DataFrame.from_dict(res_dict, orient='index')
+    table = table.fillna("")
+    table.index.name = "Source of Variation"
     return table
