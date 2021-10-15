@@ -302,78 +302,52 @@ def two_factor_factorial(df, factor1_col=None, factor2_col=None, observ_col=None
 
     n_total = n_treats1 * n_treats2 * n_replicas  # = len(df)
 
-    # Degree of Freedom
-    dof_treat1 = n_treats1 - 1
-    dof_treat2 = n_treats2 - 1
-    dof_inter = dof_treat1 * dof_treat2
-    dof_error = n_treats1 * n_treats2 * (n_replicas - 1)
-    dof_total = n_treats1 * n_treats2 * n_replicas - 1
+    if n_replicas > 1:
+        # Degree of Freedom
+        dof_treat1 = n_treats1 - 1
+        dof_treat2 = n_treats2 - 1
+        dof_inter = dof_treat1 * dof_treat2
+        dof_error = n_treats1 * n_treats2 * (n_replicas - 1)
+        dof_total = n_treats1 * n_treats2 * n_replicas - 1
 
-    # Sum of Squares
-    ss_treat1 = _sum_y2_k(df, factor1_col, observ_col) / (n_treats1 * n_replicas) - _y2_sum(df, observ_col) / n_total
-    ss_treat2 = _sum_y2_k(df, factor2_col, observ_col) / (n_treats2 * n_replicas) - _y2_sum(df, observ_col) / n_total
-    ss_inter = _sum_y2_kj(df, factor1_col, factor2_col, observ_col) / n_replicas - _y2_sum(
-        df, observ_col) / n_total - ss_treat1 - ss_treat2
-    ss_total = _sum_y2(df, observ_col) - _y2_sum(df, observ_col) / n_total
-    ss_error = ss_total - ss_treat1 - ss_treat2 - ss_inter
+        # Sum of Squares
+        ss_treat1 = _sum_y2_k(df, factor1_col, observ_col) / (n_treats1 * n_replicas) - _y2_sum(df,
+                                                                                                observ_col) / n_total
+        ss_treat2 = _sum_y2_k(df, factor2_col, observ_col) / (n_treats2 * n_replicas) - _y2_sum(df,
+                                                                                                observ_col) / n_total
+        ss_inter = _sum_y2_kj(df, factor1_col, factor2_col, observ_col) / n_replicas - _y2_sum(
+            df, observ_col) / n_total - ss_treat1 - ss_treat2
+        ss_total = _sum_y2(df, observ_col) - _y2_sum(df, observ_col) / n_total
+        ss_error = ss_total - ss_treat1 - ss_treat2 - ss_inter
 
-    # Mean Squares
-    ms_treat1 = ss_treat1 / dof_treat1
-    ms_treat2 = ss_treat2 / dof_treat2
-    ms_inter = ss_inter / dof_inter
-    ms_error = ss_error / dof_error
+        # Mean Squares
+        ms_treat1 = ss_treat1 / dof_treat1
+        ms_treat2 = ss_treat2 / dof_treat2
+        ms_inter = ss_inter / dof_inter
+        ms_error = ss_error / dof_error
 
-    # test statistic
-    f0_treat1 = ms_treat1 / ms_error
-    f0_treat2 = ms_treat2 / ms_error
-    f0_inter = ms_inter / ms_error
+        # test statistic
+        f0_treat1 = ms_treat1 / ms_error
+        f0_treat2 = ms_treat2 / ms_error
+        f0_inter = ms_inter / ms_error
 
-    # Print Table 5.3
-    cols = ["Source of Variation", "Sum of Squares", "Degree of Freedom", "Mean Square", "F0", "P-Value"]
-    rows = [
-        ["Factor-1", ss_treat1, dof_treat1, ms_treat1, f0_treat1,
-         stats.f(dof_treat1, dof_error).sf(f0_treat1)],
-        ["Factor-2", ss_treat2, dof_treat2, ms_treat2, f0_treat2,
-         stats.f(dof_treat2, dof_error).sf(f0_treat2)],
-        ["Interaction", ss_inter, dof_inter, ms_inter, f0_inter,
-         stats.f(dof_inter, dof_error).sf(f0_inter)],
-        ["Error", ss_error, dof_error, ms_error, "", ""],
-        ["Total", ss_total, dof_total, "", "", ""],
-    ]
-    table = pd.DataFrame(rows, columns=cols)
-    table = table.set_index("Source of Variation")
-    return table
+        # Print Table 5.3
+        cols = ["Source of Variation", "Sum of Squares", "Degree of Freedom", "Mean Square", "F0", "P-Value"]
+        rows = [
+            ["Factor-1", ss_treat1, dof_treat1, ms_treat1, f0_treat1,
+             stats.f(dof_treat1, dof_error).sf(f0_treat1)],
+            ["Factor-2", ss_treat2, dof_treat2, ms_treat2, f0_treat2,
+             stats.f(dof_treat2, dof_error).sf(f0_treat2)],
+            ["Interaction", ss_inter, dof_inter, ms_inter, f0_inter,
+             stats.f(dof_inter, dof_error).sf(f0_inter)],
+            ["Error", ss_error, dof_error, ms_error, "", ""],
+            ["Total", ss_total, dof_total, "", "", ""],
+        ]
+        table = pd.DataFrame(rows, columns=cols)
+        table = table.set_index("Source of Variation")
+        return table
 
-
-def two_factor_factorial_oneobs(df, factor1_col=None, factor2_col=None, observ_col=None):
-    """Two-Factor Factorial, One Observation per Cell.
-    Note that this is very similar to the Randomized Complete Block Design.
-    """
-
-    # Default format of the dataframe
-    cols = [factor1_col, factor2_col, observ_col]
-    if None in cols:
-        factor1_col, factor2_col, observ_col = df.columns
-
-    treats1 = list(df[factor1_col].unique())
-    treats1 = sorted(treats1)
-
-    treats2 = list(df[factor2_col].unique())
-    treats2 = sorted(treats2)
-
-    n_treats1 = len(treats1)  # a
-    n_treats2 = len(treats2)  # b
-
-    n_replicas = 1
-
-    # Check if all combination of factor1/factor2 have the same number of replicas
-    for t1 in treats1:
-        for t2 in treats2:
-            n_replicas_12 = len(df[(df[factor1_col] == t1) & (df[factor2_col] == t2)])
-            if not n_replicas_12 == n_replicas:
-                raise Exception("More than one replica: this is not one observation per cell.")
-
-    n_total = n_treats1 * n_treats2 * n_replicas  # = len(df)
+    # elif n_replicas==1
 
     # Degree of Freedom
     dof_treat1 = n_treats1 - 1
