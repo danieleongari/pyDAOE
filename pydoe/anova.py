@@ -5,21 +5,21 @@ import pandas as pd
 from pydoe.utils import ALPHABET, contrast_constants_table
 
 
-def _sum_y2_k(df, k, y):  #TODO: add as a function of the DataFrame
+def _sum_y2_k(df, k, y):
     """Sum of the squared sums over the column k.
     Typically `k` is the Factor or Block column and `y` is the column of Observations.
     """
     return (df.groupby(k).sum()[y]**2).sum()
 
 
-def _sum_y2_kj(df, k, j, y):  #TODO: add as a function of the DataFrame
+def _sum_y2_kj(df, k, j, y):
     """Sum of the squared sums over the column k and j, i.e., for each replica.
     Typically `k` and `j` are the Factors and `y` is the column of Observations.
     """
     return (df.groupby([k, j]).sum()[y]**2).sum()
 
 
-def _ssyyy(df, k, j, y):  #TODO: add as a function of the DataFrame
+def _ssyyy(df, k, j, y):
     """Double sum in Equation 5.20."""
     s = 0
     for _, row in df.iterrows():
@@ -27,12 +27,12 @@ def _ssyyy(df, k, j, y):  #TODO: add as a function of the DataFrame
     return s
 
 
-def _y2_sum(df, y):  #TODO: add as a function of the DataFrame
+def _y2_sum(df, y):
     """Square of the y sum."""
     return df[y].sum()**2
 
 
-def _sum_y2(df, y):  #TODO: add as a function of the DataFrame
+def _sum_y2(df, y):
     """Sum of y squared."""
     return (df[y]**2).sum()
 
