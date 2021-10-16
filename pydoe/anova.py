@@ -291,15 +291,12 @@ def two_factor_factorial(df, factor1_col=None, factor2_col=None, observ_col=None
     n_treats1 = len(treats1)  # a
     n_treats2 = len(treats2)  # b
 
-    n_replicas = len(df[(df[factor1_col] == treats1[0]) & (df[factor2_col] == treats2[0])])  # n
-
     # Check if all combination of factor1/factor2 have the same number of replicas
-    for t1 in treats1:
-        for t2 in treats2:
-            n_replicas_12 = len(df[(df[factor1_col] == t1) & (df[factor2_col] == t2)])
-            if not n_replicas_12 == n_replicas:
-                raise NotImplementedError("Incomplete two factorial not implemented.")
+    replicas = df.groupby([factor1_col, factor2_col]).count()[observ_col].unique()  # np.array
+    if len(replicas) > 1:
+        raise NotImplementedError("Incomplete two factorial not implemented.")
 
+    n_replicas = replicas[0]  # n, Only one value if previous check passed
     n_total = n_treats1 * n_treats2 * n_replicas  # = len(df)
 
     if n_replicas > 1:
