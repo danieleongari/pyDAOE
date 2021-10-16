@@ -451,19 +451,23 @@ def twok_factorial(df):
     # Evalutate total and error
     ss_total = _sum_y2(df, observ_col) - _y2_sum(df, observ_col) / ((2**n_fact) * n_repl)  # Equation 6.9
     ss_error = ss_total - sum([res_dict[effect]["Sum of Squares"] for effect in effects])
-    res_dict["Error"] = {
-        "Sum of Squares": ss_error,
-        "Degrees of Freedom": (2**n_fact) * (n_repl - 1)
-    }  # DOF will fail with only one replica!!!
+    res_dict["Error"] = {"Sum of Squares": ss_error}
     res_dict["Total"] = {"Sum of Squares": ss_total, "Degrees of Freedom": ((2**n_fact) * n_repl) - 1}
 
-    for key in effects + ['Error']:
-        res_dict[key]['Mean Square'] = res_dict[key]["Sum of Squares"] / res_dict[key]["Degrees of Freedom"]
-
     for key in effects:
-        f0 = res_dict[key]['Mean Square'] / res_dict['Error']['Mean Square']
-        pval = stats.f(res_dict[key]['Degrees of Freedom'], res_dict['Error']['Degrees of Freedom']).sf(f0)
-        res_dict[key].update({"F0": f0, "P-Value": pval})
+        res_dict[key]['%Contribution'] = 100 * res_dict[key]['Sum of Squares'] / res_dict["Total"]['Sum of Squares']
+
+    # Error's DoF, Mean Square, and P-Values will only make sense if n_repl>1
+    if n_repl > 1:
+        res_dict["Error"]["Degrees of Freedom"] = (2**n_fact) * (n_repl - 1)  # DOF will fail with only one replica!!!
+
+        for key in effects + ['Error']:
+            res_dict[key]['Mean Square'] = res_dict[key]["Sum of Squares"] / res_dict[key]["Degrees of Freedom"]
+
+        for key in effects:
+            f0 = res_dict[key]['Mean Square'] / res_dict['Error']['Mean Square']
+            pval = stats.f(res_dict[key]['Degrees of Freedom'], res_dict['Error']['Degrees of Freedom']).sf(f0)
+            res_dict[key].update({"F0": f0, "P-Value": pval})
 
     # Print Table
     table = pd.DataFrame.from_dict(res_dict, orient='index')
