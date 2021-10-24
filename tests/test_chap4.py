@@ -24,7 +24,7 @@ def test_example_4_2():
 
 
 def test_example_4_3():
-    """Example 4.2: Graeco-Latin Square Analysis for the Rocket Propellent Experiment (with -25 shifted observations)."""
+    """Example 4.3: Graeco-Latin Square Analysis for the Rocket Propellent Experiment (with -25 shifted observations)."""
 
     df = pd.read_csv(DATA_DIR / "tab_4_20.csv")
 
