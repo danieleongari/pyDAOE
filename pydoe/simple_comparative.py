@@ -2,7 +2,7 @@
 from scipy import stats
 
 
-def t_test(df, factor_col=None, observ_col=None):
+def t_test(df, factor_col=None, observ_col=None, equal_var='True', alternative='two-sided'):
     """Wrapper for scipy.stats.ttest_ind."""
 
     # Default format of the dataframe
@@ -15,8 +15,8 @@ def t_test(df, factor_col=None, observ_col=None):
     res = stats.ttest_ind(
         a=df[df[factor_col] == treats[0]].loc[:, observ_col].values,
         b=df[df[factor_col] == treats[1]].loc[:, observ_col].values,
-        equal_var=True,  # default
-        alternative='two-sided'  # default
+        equal_var=equal_var,  # default: True
+        alternative=alternative  # default: 'two-sided'
     )
 
     return {"P-Value": res.pvalue}
