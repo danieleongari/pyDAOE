@@ -17,4 +17,5 @@ cd pyDOE3
 pip install -e .
 ```
 you can find the examples and exercises inspired from the book in the `tests` folder.
-The reference version of the book uses imperial units.
+The reference version of the book uses imperial units, and specifically the 9th edition of the book, 
+which is also used as a reference in the Coursera specialization.
