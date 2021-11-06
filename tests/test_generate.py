@@ -1,4 +1,4 @@
-from pydoe.generate_design import which_design
+from pydaoe.generate_design import which_design
 
 
 def test_which():

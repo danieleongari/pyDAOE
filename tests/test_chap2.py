@@ -1,5 +1,5 @@
 import pandas as pd
-from pydoe.simple_comparative import t_test, t_test_paired
+from pydaoe.simple_comparative import t_test, t_test_paired
 from . import DATA_DIR
 
 

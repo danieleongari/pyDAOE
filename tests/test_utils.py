@@ -1,4 +1,4 @@
-from pydoe.utils import contrast_constants_table
+from pydaoe.utils import contrast_constants_table
 
 
 def test_cc_table():

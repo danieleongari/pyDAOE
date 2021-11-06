@@ -1,5 +1,5 @@
 import pandas as pd
-from pydoe.anova import two_factor_factorial
+from pydaoe.anova import two_factor_factorial
 from . import DATA_DIR
 
 

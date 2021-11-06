@@ -1,5 +1,5 @@
 import pandas as pd
-from pydoe.anova import twok_factorial
+from pydaoe.anova import twok_factorial
 from . import DATA_DIR
 
 

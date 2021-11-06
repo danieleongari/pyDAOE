@@ -1,5 +1,5 @@
 import pandas as pd
-from pydoe.anova import rcbd, latin_square, graeco_latin_square
+from pydaoe.anova import rcbd, latin_square, graeco_latin_square
 from . import DATA_DIR
 
 

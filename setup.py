@@ -8,7 +8,7 @@ if __name__ == '__main__':
     setup(packages=find_packages(),
           long_description=LONG_DESCRIPTION,
           long_description_content_type='text/markdown',
-          name="pyDOE3",
+          name="pyDOAE",
           author="Daniele Ongari",
           author_email="daniele.ongari@gmail.com",
           description="Design of Experiments",

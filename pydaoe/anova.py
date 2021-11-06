@@ -2,7 +2,7 @@
 from scipy import stats
 import pandas as pd
 
-from pydoe.utils import ALPHABET, contrast_constants_table
+from pydaoe.utils import ALPHABET, contrast_constants_table
 
 
 def _sum_y2_k(df, k, y):

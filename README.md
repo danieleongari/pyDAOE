@@ -1,4 +1,4 @@
-# PyDOE3: Design and Analysis of experiments
+# PyDAOE: Design and Analysis of Experiments
 
 A collection of utilities for the analysis of experiments.
 
@@ -12,8 +12,8 @@ You can also browse a summary of the DoE concepts as [notes of the STAT 503 cour
 
 After downloading and installing the package as:
 ```
-git clone https://github.com/danieleongari/pyDOE3.git
-cd pyDOE3
+git clone https://github.com/danieleongari/pyDAOE.git
+cd pyDAOE
 pip install -e .
 ```
 you can find the examples and exercises inspired from the book in the `tests` folder.

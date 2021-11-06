@@ -1,5 +1,5 @@
 import pandas as pd
-from pydoe.anova import single_factor
+from pydaoe.anova import single_factor
 from . import DATA_DIR
 
 
