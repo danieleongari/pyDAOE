@@ -3,7 +3,7 @@ from scipy import stats
 
 
 def t_test(df, factor_col=None, observ_col=None, equal_var='True', alternative='two-sided'):
-    """Wrapper for scipy.stats.ttest_ind."""
+    """Wrapper on scipy.stats.ttest_ind."""
 
     # Default format of the dataframe
     cols = [factor_col, observ_col]
@@ -23,7 +23,7 @@ def t_test(df, factor_col=None, observ_col=None, equal_var='True', alternative='
 
 
 def t_test_paired(df, factor_col=None, block_col=None, observ_col=None, alternative='two-sided'):
-    """Wrapper for scipy.stats.ttest_ind."""
+    """Wrapper on scipy.stats.ttest_rel."""
 
     # Default format of the dataframe
     cols = [factor_col, block_col, observ_col]
