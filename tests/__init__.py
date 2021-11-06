@@ -1,4 +1,4 @@
-"""Tests for pyDOE3."""
+"""Tests for pyDAOE."""
 from pathlib import Path
 
 THIS_DIR = Path(__file__).resolve().parents[0]
