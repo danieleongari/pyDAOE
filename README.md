@@ -1,7 +1,5 @@
 # PyDAOE: Design and Analysis of Experiments
 
-A collection of utilities for the analysis of experiments.
-
 Based on the book [Design and Analysis of Experiments](https://www.wiley.com/en-us/Design+and+Analysis+of+Experiments%2C+10th+Edition-p-9781119492443) by Douglas C. Montgomery,
 which is covered by the [Design of Experiments Specialization](https://www.coursera.org/specializations/design-experiments) on Coursera, taught by Prof. Montgomery himself.
 
@@ -26,6 +24,17 @@ You can also install directly the last stable version as
 pip install pydaoe
 ```
 and copy&paste data and examples in your Jupyter Notebook.
+
+## Dependencies
+
+This repository rely on other great packages:
+- `pandas` - used as the main format for inputs and outputs
+- [`pyDOE`](https://github.com/clicumu/pyDOE2) - based on the dormient project 
+[`pyDOE`](https://github.com/tisimst/pyDOE), it contains many utilities to design experiments, but not much for their
+analysis
+- [`statsmodels`](https://www.statsmodels.org/stable/index.html) - originaly built upon `scipy.stats`, it contains
+lots of advanced features for the analysis of experiments
+- `scipy` - contains some basic tools which are also used by `statsmodel`, e.g., the functions of distributions
 
 ## Development
 ```
