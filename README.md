@@ -14,12 +14,15 @@ git clone https://github.com/danieleongari/pyDAOE.git
 cd pyDAOE
 pip install -e .
 ```
-you can find the examples and exercises inspired from the book in the `tests` folder.
+one can find the examples and exercises inspired from the book in the `tests` directory.
+In the case of examples/exercises that are exploiting exclusively external packages
+or that use visual representation of the results,
+they are solved in the Jupyter Notebooks in the `notebooks` directory. 
 
 The reference version of the book uses imperial units, and specifically the 9th edition of the book, 
 which is also used as a reference in the Coursera specialization.
 
-You can also install directly the last stable version as
+One can also install directly the last stable version as
 ```
 pip install pydaoe
 ```
