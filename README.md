@@ -29,7 +29,7 @@ and copy&paste data and examples in your Jupyter Notebook.
 
 This repository rely on other great packages:
 - `pandas` - used as the main format for inputs and outputs
-- [`pyDOE`](https://github.com/clicumu/pyDOE2) - based on the dormient project 
+- [`pyDOE2`](https://github.com/clicumu/pyDOE2) - based on the dormient project 
 [`pyDOE`](https://github.com/tisimst/pyDOE), it contains many utilities to design experiments, but not much for their
 analysis
 - [`statsmodels`](https://www.statsmodels.org/stable/index.html) - originaly built upon `scipy.stats`, it contains
