@@ -38,6 +38,7 @@ analysis
 - [`statsmodels`](https://www.statsmodels.org/stable/index.html) - originaly built upon `scipy.stats`, it contains
 lots of advanced features for the analysis of experiments
 - `scipy` - contains some basic tools which are also used by `statsmodel`, e.g., the functions of distributions
+- `scikit-learn` - contains some advanced models, not implemented in `statsmodels`
 
 ## Development
 ```

@@ -16,7 +16,7 @@ if __name__ == '__main__':
           license="Creative Commons",
           classifiers=["Programming Language :: Python"],
           version="0.1.0",
-          install_requires=["pandas", "statsmodels", "scipy", "matplotlib"],
+          install_requires=["pandas", "statsmodels", "scipy", "scikit-learn", "matplotlib"],
           extras_require={
               "testing": ["pytest==6.2.5", "pytest-cov==2.12.1"],
               "pre-commit": [
